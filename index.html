@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Pay with Crypto</title>
+
+  <!-- 1. Telegram WebApp SDK (MUST be loaded first) -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    :root {
+      /* Fallback values before Telegram theme variables are applied */
+      --bg-color: #f5f5f7;
+      --text-color: #1d1d1f;
+      --hint-color: #6e6e73;
+      --button-color: #007aff;
+      --button-text-color: #ffffff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 24px;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      text-align: center;
+      /* Smooth transition when theme changes */
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      margin: 0 0 12px;
+    }
+
+    p {
+      color: var(--hint-color);
+      max-width: 420px;
+      line-height: 1.5;
+      margin: 0 0 8px;
+    }
+
+    .button-wrap {
+      margin: 28px 0;
+    }
+
+    /* Optional: Style the native MainButton via CSS variables if needed */
+    .tg-main-button {
+      /* Not directly styleable, but kept for reference */
+    }
+  </style>
+</head>
+<body>
+  <h1>Complete Your Payment</h1>
+  <p>Click the button below to pay with Bitcoin or another supported cryptocurrency.</p>
+
+  <!-- Blockonomics pay button -->
+  <div class="button-wrap">
+    <blockonomics-pay-button
+      uid="53dedda701434fb5"
+      label="Pay with Crypto">
+    </blockonomics-pay-button>
+  </div>
+
+  <!-- Blockonomics pay button script (must load after the button element) -->
+  <script src="https://www.blockonomics.co/js/pay-button.js"></script>
+
+  <script>
+    // 2. Initialize the Telegram Mini App
+    const tg = window.Telegram.WebApp;
+
+    // Signal that the Mini App is ready to be displayed (hides loading placeholder)
+    tg.ready();
+
+    // Expand the Mini App to the full available height
+    tg.expand();
+
+    // Prevent accidental closing when the user scrolls inside the app
+    // (Disables vertical swipes that would otherwise minimize the app)
+    tg.disableVerticalSwipes();
+
+    // 3. Apply Telegram theme parameters as CSS variables
+    // This makes the page automatically match the user's Telegram light/dark theme.
+    const theme = tg.themeParams;
+    const root = document.documentElement;
+
+    if (theme.bg_color) root.style.setProperty('--bg-color', theme.bg_color);
+    if (theme.text_color) root.style.setProperty('--text-color', theme.text_color);
+    if (theme.hint_color) root.style.setProperty('--hint-color', theme.hint_color);
+    if (theme.button_color) root.style.setProperty('--button-color', theme.button_color);
+    if (theme.button_text_color) root.style.setProperty('--button-text-color', theme.button_text_color);
+
+    // 4. (Optional) Log user info for debugging — remove in production
+    const user = tg.initDataUnsafe?.user;
+    if (user) {
+      console.log(`Mini App opened by: ${user.first_name} (ID: ${user.id})`);
+    }
+
+    // 5. (Optional) Handle the "back" button or closing if needed
+    // tg.BackButton.onClick(() => tg.close());
+  </script>
+</body>
+</html>
